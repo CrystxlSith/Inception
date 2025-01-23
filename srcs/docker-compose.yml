@@ -1,14 +1,24 @@
-version: '3.9'
+# version: '3.9'
 services:
-  debian:
-    image: debian:11
+  nginx:
+    image: debian:latest
     container_name: debian_container
-    tty: true
-    stdin_open: true
+    build: requirements/nginx
     volumes:
       - ./data:/data
     ports:
       - "8080:80"
+    restart: always
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress_container
+    volumes:
+      - ./data:/data
+    ports:
+      - "8081:80"
     environment:
-      - DEBIAN_FRONTEND=noninteractive
+      - WORDPRESS_DB_HOST=wordpress_db
+      - WORDPRESS_DB_USER=wordpress_user
+      - WORDPRESS_DB_PASSWORD=wordpress_password
+      - WORDPRESS_DB_NAME=wordpress_db
     restart: always
