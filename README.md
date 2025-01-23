@@ -8,3 +8,5 @@ besoins
 • Un second volume contenant les fichiers de votre site WordPress.
 • Un docker-network qui fera le lien entre vos containers.
 Vos containers devront redémarrer en cas de crash.
+
+!! MODIFIER LES :latest

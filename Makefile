@@ -13,7 +13,7 @@ build:
 	docker-compose build
 
 restart:
-	sudo docker-compose -f srcs/docker-compose.yml down && sudo docker-compose -f srcs/docker-compose.yml up -d
+	sudo docker-compose -f srcs/docker-compose.yml down && sudo docker-compose -f srcs/docker-compose.yml up -d --build
 
 logs:
 	sudo docker-compose -f srcs/docker-compose.yml logs -f

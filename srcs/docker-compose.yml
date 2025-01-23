@@ -1,13 +1,22 @@
 # version: '3.9'
+
+networks:
+  inception:
+    name: inception
+
 services:
   nginx:
     image: debian:latest
     container_name: debian_container
-    build: requirements/nginx
+    build: requirements/nginx/.
     volumes:
       - ./data:/data
     ports:
-      - "8080:80"
+      - "443:443"
+    env_file:
+      - .env
+    networks:
+      - inception
     restart: always
   wordpress:
     image: wordpress:latest
@@ -21,4 +30,8 @@ services:
       - WORDPRESS_DB_USER=wordpress_user
       - WORDPRESS_DB_PASSWORD=wordpress_password
       - WORDPRESS_DB_NAME=wordpress_db
+    env_file:
+      - .env
+    networks:
+      - inception
     restart: always

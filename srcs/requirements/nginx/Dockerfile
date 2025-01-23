@@ -1,8 +1,18 @@
 FROM debian:latest
 
-RUN apt-get update && apt upgrade && apt-get install -y php-fpm \
-nginx
+RUN apt-get update && apt upgrade && apt-get install -y nginx openssl
 
-EXPOSE 80
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout /etc/ssl/private/nginx-selfsigned.key \
+    -out /etc/ssl/certs/nginx-selfsigned.crt \
+    -subj "/C=FR/ST=IDF/L=Paris/O=42/OU=42/CN=jopfeiff.42.fr"
 
-CMD ["nginx", "-g", "daemon off;"]
+    
+COPY ./conf/script.sh /
+COPY ./conf/nginx.conf /etc/nginx/conf.d
+
+RUN chmod 777 /script.sh
+
+EXPOSE 443
+
+CMD ["/script.sh"]
