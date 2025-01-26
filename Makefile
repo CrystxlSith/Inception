@@ -20,3 +20,6 @@ logs:
 
 status:
 	sudo docker compose -f srcs/docker-compose.yml ps -a
+
+clean:
+	docker system prune -a
