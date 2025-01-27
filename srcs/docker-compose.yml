@@ -34,6 +34,8 @@ services:
       - .env
     networks:
       - inception
+    depends_on:
+      - wordpress
     restart: always
   wordpress:
     build: requirements/wordpress/.
@@ -43,12 +45,13 @@ services:
       - wordpress:/var/www/html
     env_file:
       - .env
+    depends_on:
+      - mariadb
     networks:
       - inception
     restart: always
   mariadb:
     build: requirements/mariadb/.
-    image: mariadb:latest
     container_name: mariadb
     volumes:
       - mariadb:/var/lib/mysql

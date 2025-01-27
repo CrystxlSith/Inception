@@ -1,39 +1,35 @@
 #!/bin/bash
 
-# Setup directories
-mkdir -p /var/run/mysqld
+# Create and set proper permissions for required directories
+mkdir -p /var/run/mysqld /var/lib/mysql
 chown -R mysql:mysql /var/run/mysqld /var/lib/mysql
+chmod 777 /var/run/mysqld
 
-# Initialize if needed
+# Initialize database if not already done
 if [ ! -d "/var/lib/mysql/mysql" ]; then
     mysql_install_db --user=mysql --datadir=/var/lib/mysql
-    
-    # Start MySQL temporarily
-    mysqld --user=mysql --bootstrap << EOF
-CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
-CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
-GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
-FLUSH PRIVILEGES;
-EOF
 fi
 
-# Start MariaDB
-mysqld
-# #!/bin/bash
+# Start MariaDB service
+mysqld --user=mysql &
+sleep 5  # Wait for MySQL to fully start
 
+# Create database configuration
+mysql << EOF
+CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
+CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
+GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%';
+ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
+FLUSH PRIVILEGES;
+EOF
 
+# Stop background MariaDB process
+if [ -f "/var/run/mysqld/mysqld.pid" ]; then
+    kill $(cat /var/run/mysqld/mysqld.pid)
+    while [ -f "/var/run/mysqld/mysqld.pid" ]; do
+        sleep 1
+    done
+fi
 
-# service mysql start 
-
-
-# echo "CREATE DATABASE IF NOT EXISTS $db1_name ;" > db1.sql
-# echo "CREATE USER IF NOT EXISTS '$db1_user'@'%' IDENTIFIED BY '$db1_pwd' ;" >> db1.sql
-# echo "GRANT ALL PRIVILEGES ON $db1_name.* TO '$db1_user'@'%' ;" >> db1.sql
-# echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '12345' ;" >> db1.sql
-# echo "FLUSH PRIVILEGES;" >> db1.sql
-
-# mysql < db1.sql
-
-# kill $(cat /var/run/mysqld/mysqld.pid)
-
-# mysqld
+# Start MariaDB in foreground mode with proper permissions
+exec mysqld --user=mysql --console
