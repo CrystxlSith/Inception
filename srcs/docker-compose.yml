@@ -1,5 +1,22 @@
 # version: '3.9'
 
+volumes:
+        wordpress:
+                name: wordpress
+                driver: local
+                driver_opts:
+                        device: /home/rottbliss/42/inception/srcs/data/wordpress
+                        o: bind
+                        type: none
+        mariadb:
+                name: mariadb
+                driver: local
+                driver_opts:
+                        device: /home/rottbliss/42/inception/srcs/data/mariadb
+                        o: bind
+                        type: none
+
+
 networks:
   inception:
     name: inception
@@ -10,7 +27,7 @@ services:
     container_name: nginx
     build: requirements/nginx/.
     volumes:
-      - .wordpress:/var/www/html
+      - wordpress:/var/www/html
     ports:
       - "443:443"
     env_file:
@@ -23,12 +40,18 @@ services:
     image: wordpress:latest
     container_name: wordpress
     volumes:
-      - .wordpress:/var/www/html
-    environment:
-      - WORDPRESS_DB_HOST=wordpress_db
-      - WORDPRESS_DB_USER=wordpress_user
-      - WORDPRESS_DB_PASSWORD=wordpress_password
-      - WORDPRESS_DB_NAME=wordpress_db
+      - wordpress:/var/www/html
+    env_file:
+      - .env
+    networks:
+      - inception
+    restart: always
+  mariadb:
+    build: requirements/mariadb/.
+    image: mariadb:latest
+    container_name: mariadb
+    volumes:
+      - mariadb:/var/lib/mysql
     env_file:
       - .env
     networks:
