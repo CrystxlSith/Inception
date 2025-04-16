@@ -1,4 +1,4 @@
-FROM debian:latest
+FROM debian:bookworm
 
 # Install required packages
 RUN apt-get update && apt-get install -y \
@@ -23,16 +23,16 @@ RUN if [ ! -d /run/php ]; then mkdir -p /run/php; fi
 
 WORKDIR /var/www/html
 
-RUN wget http://wordpress.org/latest.tar.gz && \
-  tar xfz latest.tar.gz && \
+RUN wget https://wordpress.org/wordpress-6.4.3.tar.gz && \
+  tar xfz wordpress-6.4.3.tar.gz && \
   mv wordpress/* . && \
-  rm -rf latest.tar.gz && \
+  rm -rf wordpress-6.4.3.tar.gz && \
   rm -rf wordpress
 
 
 #we copy the script, give the right to launch it in local on our computer
 COPY ./conf/script.sh /
-COPY ./conf/wp-config.php /
+COPY ./conf/wp-config.php /var/www/html/
 
 RUN chmod +x /script.sh
 

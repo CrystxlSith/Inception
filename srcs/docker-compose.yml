@@ -5,14 +5,14 @@ volumes:
                 name: wordpress
                 driver: local
                 driver_opts:
-                        device: /home/rottbliss/42/inception/srcs/data/wordpress
+                        device: /home/clarily/data/wordpress
                         o: bind
                         type: none
         mariadb:
                 name: mariadb
                 driver: local
                 driver_opts:
-                        device: /home/rottbliss/42/inception/srcs/data/mariadb
+                        device: /home/clarily/data/mariadb
                         o: bind
                         type: none
 
@@ -23,7 +23,7 @@ networks:
 
 services:
   nginx:
-    image: debian:latest
+    image: debian:bookworm
     container_name: nginx
     build: requirements/nginx/.
     volumes:
@@ -39,7 +39,7 @@ services:
     restart: always
   wordpress:
     build: requirements/wordpress/.
-    image: wordpress:latest
+    image: wordpress:6.4.3
     container_name: wordpress
     volumes:
       - wordpress:/var/www/html

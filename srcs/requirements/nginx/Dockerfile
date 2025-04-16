@@ -1,6 +1,6 @@
-FROM debian:latest
+FROM debian:bookworm
 
-RUN apt-get update && apt upgrade && apt-get install -y nginx openssl
+RUN apt-get update && apt upgrade -y && apt-get install -y nginx openssl
 
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -keyout /etc/ssl/private/nginx-selfsigned.key \
