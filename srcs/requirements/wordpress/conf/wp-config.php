@@ -20,16 +20,16 @@
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'database_name_here' );
+define( 'DB_NAME', getenv('MYSQL_DATABASE') );
 
 /** MySQL database username */
-define( 'DB_USER', 'username_here' );
+define( 'DB_USER', getenv('MYSQL_USER') );
 
 /** MySQL database password */
-define( 'DB_PASSWORD', 'password_here' );
+define( 'DB_PASSWORD', getenv('MYSQL_PASSWORD') );
 
 /** MySQL hostname */
-define( 'DB_HOST', 'localhost' );
+define( 'DB_HOST', getenv('MYSQL_HOSTNAME') );
 
 /** Database Charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
@@ -57,11 +57,10 @@ define( 'SECURE_AUTH_SALT', '0<MR&l4v=cZ)8Ke/#ip>2<Ed@ j<#pvLaOMc-jEFM9^tr`X*T2q
 define( 'LOGGED_IN_SALT',   'xSHh4B]r[~)h%n$f(dCt;mD}#q gy$<{ >qGgPS>XH*]jH>W<!10>H<_16l{(OdP' );
 define( 'NONCE_SALT',       '7Ea$kvU|lkO8&X]b7^#K+w! lH2)SOelLiaYYX(Zz)Ebk_]-#m,J&aM<*JedFa| ' );
 
-define( 'WP_REDIS_HOST', 'redis' );
-define( 'WP_REDIS_PORT', 6379 );     
-
-
-define('WP_CACHE', true);
+// Redis configuration (if using Redis)
+// define( 'WP_REDIS_HOST', 'redis' );
+// define( 'WP_REDIS_PORT', 6379 );     
+// define('WP_CACHE', true);
 
 /**#@-*/
 
@@ -85,7 +84,7 @@ $table_prefix = 'wp_';
  *
  * @link https://wordpress.org/support/article/debugging-in-wordpress/
  */
-define( 'WP_DEBUG', true );
+define( 'WP_DEBUG', false );
 
 /* That's all, stop editing! Happy publishing. */
 

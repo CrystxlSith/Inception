@@ -5,7 +5,7 @@ RUN apt-get update && apt upgrade -y && apt-get install -y nginx openssl
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -keyout /etc/ssl/private/nginx-selfsigned.key \
     -out /etc/ssl/certs/nginx-selfsigned.crt \
-    -subj "/C=FR/ST=IDF/L=Paris/O=42/OU=42/CN=jopfeiff.42.fr"
+    -subj "/C=FR/ST=IDF/L=Paris/O=42/OU=42/CN=clarily.42.fr"
 
     
 COPY ./conf/script.sh /
