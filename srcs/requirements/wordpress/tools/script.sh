@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Read secrets
+WP_ADMIN_PASSWORD=$(cat /run/secrets/wp_admin_password)
+WP_USER_PASSWORD=$(cat /run/secrets/wp_user_password)
+DB_PASSWORD=$(cat /run/secrets/db_password)
+source /run/secrets/credentials
+
 # Create necessary directories
 mkdir -p /var/www/html
 mkdir -p /run/php
@@ -25,7 +31,7 @@ if ! wp core is-installed --allow-root 2>/dev/null; then
     
     # Wait for database to be ready and create wp-config.php
     echo "Waiting for database to be ready..."
-    until wp config create --dbname="${MYSQL_DATABASE}" --dbuser="${MYSQL_USER}" --dbpass="${MYSQL_PASSWORD}" --dbhost="${MYSQL_HOSTNAME}" --allow-root --force; do
+    until wp config create --dbname="${MYSQL_DATABASE}" --dbuser="${MYSQL_USER}" --dbpass="${DB_PASSWORD}" --dbhost="${MYSQL_HOSTNAME}" --allow-root --force; do
         echo "Database not ready, waiting..."
         sleep 2
     done
@@ -34,8 +40,8 @@ if ! wp core is-installed --allow-root 2>/dev/null; then
     wp core install \
         --url="${WP_URL:-https://jopfeiff.42.fr}" \
         --title="${WP_TITLE:-Inception WordPress}" \
-        --admin_user="${WP_ADMIN_USER:-admin}" \
-        --admin_password="${WP_ADMIN_PASSWORD:-admin_password}" \
+        --admin_user="${WP_ADMIN_USER}" \
+        --admin_password="${WP_ADMIN_PASSWORD}" \
         --admin_email="${WP_ADMIN_EMAIL:-admin@jopfeiff.42.fr}" \
         --allow-root
     
@@ -44,7 +50,7 @@ if ! wp core is-installed --allow-root 2>/dev/null; then
     # Create additional user if specified
     if [ -n "$WP_USER" ]; then
         wp user create "$WP_USER" "$WP_USER_EMAIL" \
-            --user_pass="$WP_USER_PASSWORD" \
+            --user_pass="${WP_USER_PASSWORD}" \
             --role=author \
             --allow-root
         echo "Additional user created: $WP_USER"

@@ -21,6 +21,18 @@ networks:
   inception:
     name: inception
 
+secrets:
+  db_password:
+    file: ../secrets/db_password.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  wp_admin_password:
+    file: ../secrets/wp_admin_password.txt
+  wp_user_password:
+    file: ../secrets/wp_user_password.txt
+  credentials:
+    file: ../secrets/credentials.txt
+
 services:
   nginx:
     build: requirements/nginx/.
@@ -45,6 +57,11 @@ services:
       - wordpress:/var/www/html
     env_file:
       - .env
+    secrets:
+      - wp_admin_password
+      - wp_user_password
+      - db_password
+      - credentials
     depends_on:
       - mariadb
     networks:
@@ -58,6 +75,10 @@ services:
       - mariadb:/var/lib/mysql
     env_file:
       - .env
+    secrets:
+      - db_password
+      - db_root_password
+      - credentials
     networks:
       - inception
     restart: always
