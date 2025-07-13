@@ -23,9 +23,9 @@ networks:
 
 services:
   nginx:
-    image: debian:bookworm
-    container_name: nginx
     build: requirements/nginx/.
+    image: nginx:inception
+    container_name: nginx
     volumes:
       - wordpress:/var/www/html
     ports:
@@ -39,7 +39,7 @@ services:
     restart: always
   wordpress:
     build: requirements/wordpress/.
-    image: wordpress:6.4.3
+    image: wordpress:inception
     container_name: wordpress
     volumes:
       - wordpress:/var/www/html
@@ -52,6 +52,7 @@ services:
     restart: always
   mariadb:
     build: requirements/mariadb/.
+    image: mariadb:inception
     container_name: mariadb
     volumes:
       - mariadb:/var/lib/mysql

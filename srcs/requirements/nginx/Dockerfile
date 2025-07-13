@@ -8,7 +8,7 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -subj "/C=FR/ST=IDF/L=Paris/O=42/OU=42/CN=clarily.42.fr"
 
     
-COPY ./conf/script.sh /
+COPY ./tools/script.sh /
 COPY ./conf/nginx.conf /etc/nginx/conf.d
 
 RUN chmod 777 /script.sh

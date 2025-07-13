@@ -1,0 +1,32 @@
+# Fichiers de développement
+*.md
+README*
+
+# Fichiers de sauvegarde et temporaires
+*.tmp
+*.bak
+*.swp
+*~
+
+# Fichiers de logs
+*.log
+
+# Fichiers de configuration locale
+.env*
+.DS_Store
+Thumbs.db
+
+# Dossiers de cache
+.cache/
+node_modules/
+
+# Fichiers git
+.git/
+.gitignore
+
+# Documentation
+docs/
+
+# Fichiers de base de données
+*.sql
+*.dump

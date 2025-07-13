@@ -34,7 +34,7 @@ RUN wget https://wordpress.org/wordpress-6.4.3.tar.gz && \
   rm -rf wordpress
 
 # Copy the script (but NOT wp-config.php - let the script create it)
-COPY ./conf/script.sh /
+COPY ./tools/script.sh /
 
 RUN chmod +x /script.sh
 
